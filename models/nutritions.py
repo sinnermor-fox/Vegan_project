@@ -1,4 +1,7 @@
+import typing
+
 from flask import jsonify
+from pydantic import BaseModel
 
 from app import db, app
 
@@ -13,12 +16,5 @@ class Nutritions(db.Model):
     def __repr__(self):
         return '<Nutrition %r>' % self.name
 
-@app.route("/nutr", methods=["GET"])
-def get():
-    nutr = Nutritions.query.all()
-    response = jsonify(nutr.to_dict())
-    response.status_code = 200
-    # response.headers['Location'] = url_for('api_v1.get_user', id=customer.user.id)
-    return response
 
 

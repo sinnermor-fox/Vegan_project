@@ -3,8 +3,6 @@ from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
-# import routes.food
-from models.food import Food
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = "postgresql://postgres:123456@localhost:5432/postgres"
@@ -19,4 +17,6 @@ DBSession = sessionmaker(bind=engine)
 session = DBSession()
 
 
-import routes.food
+import routes.rout_food
+import routes.rout_nutritions
+
