@@ -17,6 +17,6 @@ DBSession = sessionmaker(bind=engine)
 session = DBSession()
 
 
-import routes.rout_food
+import routes.route_food
 import routes.rout_nutritions
 

@@ -11,9 +11,8 @@ def food_id():
     response = jsonify(NutritionsAliasList(alias=nutrs).dict())
     return response
 
-
-@app.route('/nutrition/<int:id>', methods=['GET'])
-def nutr_id(id):
-    nutrs = session.query(Nutritions).filter_by(id=id).first()
+@app.route('/nutrition/<int:nutrition_id>', methods=['GET'])
+def nutr_id(nutrition_id):
+    nutrs = session.query(Nutritions).filter_by(id=nutrition_id).first()
     data = NutritionsAlias.from_orm(nutrs)
     return jsonify(data.dict())

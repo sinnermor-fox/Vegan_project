@@ -14,7 +14,6 @@ from serializators.food_serializer import FoodNettoListAlias
 
 @app.route('/food')
 def food():
-    # vegetables
     food_data = get_food_to_menu(1100, 3)
     responce = FoodNettoListAlias.from_orm(food_data)
     return jsonify(responce)
