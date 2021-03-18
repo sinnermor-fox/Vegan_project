@@ -3,7 +3,7 @@ import itertools
 import logging
 import random
 from sqlalchemy import func, funcfilter
-
+from operator import itemgetter
 from app import session
 from config import basedir
 from models.food import Food
@@ -34,18 +34,33 @@ def based_csv_menu():
     return list(itertools.chain(*food_result))
 
 def get_norms(sex: bool = True, age: int = 30):
-    norms = session.query(Norms.nutrition_id, Norms.norm_value).filter(Norms.sex == sex, Norms.min_age <= age, Norms.max_age >= age).all()
+    norms = session.\
+        query(Norms.nutrition_id, Norms.norm_value).filter(Norms.sex == sex, Norms.min_age <= age, Norms.max_age >= age).all()
     return norms
 
 def get_difference(menu_nutitions, norm_nutritions):
     difference = []
+    menu_dict = dict(menu_nutitions)
     for nutrition in norm_nutritions:
-        if menu_nutitions[nutrition.nutrition_id]:
-            difference.append({nutrition.nutrition_id: float(nutrition.norm_value-menu_nutitions[nutrition.nutrition_id])})
+        if menu_dict.get(nutrition.nutrition_id):
+            diff= float(nutrition.norm_value-menu_dict[nutrition.nutrition_id])
+            dif_percent = (diff /  nutrition.norm_value) * 100
+            difference.append({'nutrition_id': nutrition.nutrition_id, 'percent': dif_percent, 'diff': diff,
+                               'norm': nutrition.norm_value, 'menu': menu_dict[nutrition.nutrition_id]})
+        else: print(f"У нас нет значения {nutrition.nutrition_id} в меню")
+    print(sorted(difference, key=itemgetter('percent')))
     return difference
+
+def analise_menu(diff_massive):
+    sorted = sorted(diff_massive, key=itemgetter('percent'))
+    sorted
+
 
 food_list_1 = based_csv_menu()
 counted_nutrs_filtered = get_food_nutritions(food_list_1)
 norms = get_norms()
-diff  = get_difference(counted_nutrs_filtered, norms)
-print(diff)
+diff = get_difference(counted_nutrs_filtered, norms)
+
+with open('diff.txt', 'w') as f:
+    for line in diff:
+        f.writelines(f"{str(line)}\n")

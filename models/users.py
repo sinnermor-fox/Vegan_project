@@ -3,6 +3,11 @@ from sqlalchemy import Column, Integer, String, Boolean, Date
 
 
 class User(Model):
+
+    """
+        Class for store user information
+    """
+
     __tablename__ = 'users'
     id = Column(Integer, primary_key=True)
     firstname = Column(String(180), nullable=False)

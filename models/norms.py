@@ -2,6 +2,10 @@ from app import db
 
 
 class Norms(db.Model):
+
+    """
+        Class for store people norms of nutrients per day
+    """
     __tablename__ = 'norms'
     id = db.Column(db.Integer, primary_key=True)
     sex = db.Column(db.Boolean, nullable=False)
