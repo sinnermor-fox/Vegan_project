@@ -32,4 +32,8 @@ def create_menu_manual(person_id: int):
         abort(404, f'Person with id {person_id} does not exists')
 
 
-create_menu_manual(1)
+def get_menu_dressed(username):
+    user_data = session.query(User).filter(User.telegram_account==username).first()
+    menu = session.query(MenuWeek, Food.description).filter(MenuWeek.user_id==user_data.id).all()
+    return menu
+# create_menu_manual(1)

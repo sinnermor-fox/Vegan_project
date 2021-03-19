@@ -1,13 +1,11 @@
 from flask import jsonify, request
 
-from app import app, session, db
+from app import app
 from controls.algorithms.create_vegan import count_menu
-from models.food import Food
-from models.menu_week import MenuWeek
-from models.users import User
+from controls.menu_creator import get_menu_dressed
 from serializators.food_serializer import FoodNettoListAlias, FoodNettoMenuAlias
 from serializators.menu import MenuListAlias
-from serializators.nutrition_serializer import NutritionsAlias
+
 
 
 @app.route('/menu/1', methods=['GET'])
@@ -23,12 +21,10 @@ def get_menu_daily():
     data = MenuListAlias(menu=dressed_list)
     return jsonify(data.dict())
 
+# TODO fix cycle import
 @app.route('/menu/<username>', methods=['GET'])
 def get_menu_personaly(username):
-
-    user_data = session.query(User).filter(User.telegram_account==username).first()
-    menu = session.query(MenuWeek, Food.description).filter(MenuWeek.user_id==user_data.id).all()
-
+    menu = get_menu_dressed(username)
     dressed_list = []
     for item in menu:
         dressed_data = FoodNettoMenuAlias(food=item.description, netto=item.MenuWeek.netto)
