@@ -1,18 +1,20 @@
 from flask_sqlalchemy import Model
 from sqlalchemy import Column, Integer, String, Boolean, Date
 
+from app import db
 
-class User(Model):
+
+class User(db.Model):
 
     """
         Class for store user information
     """
 
     __tablename__ = 'users'
-    id = Column(Integer, primary_key=True)
-    firstname = Column(String(180), nullable=False)
-    lastname = Column(String(180), nullable=False)
-    sex = Column(Boolean)
-    birthday = Column(Date)
-    email = Column(String)
-    telegram_account = Column(String)
+    id = db.Column(db.Integer, primary_key=True)
+    firstname = db.Column(db.String(180), nullable=False)
+    lastname = db.Column(db.String(180), nullable=False)
+    sex = db.Column(db.Boolean)
+    birthday = db.Column(db.Date)
+    email = db.Column(db.String)
+    telegram_account = db.Column(db.String)

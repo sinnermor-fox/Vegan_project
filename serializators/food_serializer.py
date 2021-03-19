@@ -26,3 +26,10 @@ class FoodNettoListAlias(BaseModel):
 
     class Config:
         orm_mode = True
+
+class FoodNettoMenuAlias(BaseModel):
+    food: str
+    netto : int
+
+    class Config:
+        orm_mode = True
