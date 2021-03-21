@@ -1,3 +1,4 @@
+import flask
 from flask import jsonify, request
 
 from app import app
@@ -7,13 +8,9 @@ from serializators.food_serializer import FoodNettoListAlias, FoodNettoMenuAlias
 from serializators.menu import MenuListAlias
 
 
-
 @app.route('/menu/1', methods=['GET'])
 def get_menu_daily():
     menu_data = count_menu()
-
-    # Ниже алгоритм преобразования не кажется мне верным
-    # How to create dressed entities
     dressed_list = []
     for item in menu_data:
         dressed_data = FoodNettoMenuAlias(food=item.description, netto=100)
@@ -21,9 +18,9 @@ def get_menu_daily():
     data = MenuListAlias(menu=dressed_list)
     return jsonify(data.dict())
 
-# TODO fix cycle import
+
 @app.route('/menu/<username>', methods=['GET'])
-def get_menu_personaly(username):
+def menu_personally(username: str) -> flask.Response:
     menu = get_menu_dressed(username)
     dressed_list = []
     for item in menu:

@@ -2,9 +2,11 @@ import csv
 import itertools
 import logging
 import random
+from pathlib import Path
+
 from sqlalchemy import func, funcfilter
 from operator import itemgetter
-from app import session
+from app import db
 from config import basedir
 from models.food import Food
 from models.food_nutrients import FoodNutrients
@@ -26,7 +28,7 @@ MenuListAlias(должен ли он из контрола приходить в
 
 def get_food_nutritions(foods):
     food_ids = [el.id for el in foods]
-    counted_nutrs_filtered = session.query(FoodNutrients.nutrition_id, func.sum(FoodNutrients.nutrition_value)). \
+    counted_nutrs_filtered = db.session.query(FoodNutrients.nutrition_id, func.sum(FoodNutrients.nutrition_value)). \
         filter(FoodNutrients.food_id.in_(food_ids)). \
         group_by(FoodNutrients.nutrition_id).all()
     return counted_nutrs_filtered
@@ -40,7 +42,7 @@ def get_random_food(group_id, count):
 # похожие на FoodNettoMenuAlias нужно ли тут преобразовывать через сериализатор или работать с json
 def based_csv_menu():
     menu_structure, food_result = [], []
-    with open(f'{basedir}/data/basic_menu.csv', 'r') as f:
+    with open(Path(basedir, 'data', 'basic_menu.csv'), 'r') as f:
         reader = csv.DictReader(f)
         for row in reader:
             menu_structure.append(row)
@@ -51,7 +53,7 @@ def based_csv_menu():
 
 
 def get_norms(sex: bool = True, age: int = 30):
-    norms = session.\
+    norms = db.session.\
         query(Norms.nutrition_id, Norms.norm_value).filter(Norms.sex == sex, Norms.min_age <= age, Norms.max_age >= age).all()
     return norms
 
@@ -81,7 +83,7 @@ def count_menu(name='based_csv'):
 
 # food_list_1 = based_csv_menu()
 # counted_nutrs_filtered = get_food_nutritions(food_list_1)
-# norms = get_norms()
+norms = get_norms()
 # diff = get_difference(counted_nutrs_filtered, norms)
 #
 # with open('diff.txt', 'w') as f:

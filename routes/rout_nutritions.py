@@ -1,6 +1,6 @@
 from flask import jsonify
 
-from app import session, app
+from app import  app
 from models.nutritions import Nutritions
 from serializators.nutrition_serializer import NutritionsAliasList, NutritionsAlias
 
@@ -13,6 +13,6 @@ def food_id():
 
 @app.route('/nutrition/<int:nutrition_id>', methods=['GET'])
 def nutr_id(nutrition_id):
-    nutrs = session.query(Nutritions).filter_by(id=nutrition_id).first()
+    nutrs = Nutritions.query.filter_by(id=nutrition_id).first()
     data = NutritionsAlias.from_orm(nutrs)
     return jsonify(data.dict())

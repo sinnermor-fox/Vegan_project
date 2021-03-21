@@ -1,6 +1,6 @@
 from werkzeug.exceptions import abort
 
-from app import db, session
+from app import db
 from controls.algorithms.create_vegan import count_menu
 from models.food import Food
 from models.menu_week import MenuWeek
@@ -10,7 +10,7 @@ from models.users import User
 def create_menu_manual(person_id: int):
 
     # Конструкция типа User.query ... - ?????
-    existing_person = session.query(User).filter(User.id == person_id).first()
+    existing_person = User.query().filter(User.id == person_id).first()
 
     if existing_person is not None:
 
@@ -33,7 +33,17 @@ def create_menu_manual(person_id: int):
 
 
 def get_menu_dressed(username):
-    user_data = session.query(User).filter(User.telegram_account==username).first()
-    menu = session.query(MenuWeek, Food.description).filter(MenuWeek.user_id==user_data.id).all()
+    user_data = User.query.filter(
+        User.telegram_account == username
+    ).first()
+    menu = db.session.query(
+        MenuWeek,
+        User,
+        Food.description
+    ).filter(
+        MenuWeek.user_id == user_data.id
+    ).filter(
+        MenuWeek.food_id == Food.id
+    ).all()
     return menu
 # create_menu_manual(1)

@@ -6,8 +6,8 @@ from flask_migrate import MigrateCommand
 
 manager = Manager(app)
 
+
 def make_shell_context():
-    # return dict(app=app, db=db, User=User, Post=Post, Tag=Tag, Category=Category, Employee=Employee, Feedback=Feedback)
     return dict(app=app, db=db)
 
 manager.add_command('shell', Shell(make_context=make_shell_context))

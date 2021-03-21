@@ -5,7 +5,7 @@ import random
 
 from flask import jsonify
 
-from app import app, session
+from app import app
 # from controls.menu_creator import get_food_to_menu
 # from models.food import Food
 # from models.food_group import FoodGroup
