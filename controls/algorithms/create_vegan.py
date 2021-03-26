@@ -46,12 +46,16 @@ def get_food_nutritions(foods):
     return counted_nutrs_filtered
 
 
-def get_random_food(group_id, count):
+def get_random_food(group_id: int, count: int):
+    """
+    Метод используется для произвольной выборки определенного
+    кол-ва продуктов из каждой группы товаров
+    """
     food_data = Food.query.filter(
-                    Food.food_group_id == group_id
-                ).order_by(
-                    func.random()
-                ).limit(count).all()
+        Food.food_group_id == group_id
+    ).order_by(
+        func.random()
+    ).limit(count).all()
     return food_data
 
 
@@ -81,7 +85,7 @@ def get_norms(sex: bool = True, age: int = 30):
     return norms
 
 
-def count_units(nutrition_id):
+def count_units(nutrition_id: int):
     norm_unit = db.session.query(
             Norms.nutrition_id, Norms.unit, Nutritions.unit
         ).filter(
@@ -98,7 +102,7 @@ def count_units(nutrition_id):
     return {'norm': norm, 'menu': menu}
 
 
-def get_difference(menu_nutrition, norm_nutrition):
+def get_difference(menu_nutrition: list, norm_nutrition: list):
     difference, errors = [], []
     menu_dict = dict(menu_nutrition)
     for nutrition in norm_nutrition:
@@ -122,7 +126,7 @@ def get_difference(menu_nutrition, norm_nutrition):
     return d2
 
 
-def analise_menu(diff_massive):
+def analise_menu(diff_massive: list):
     sorted_menu = sorted(diff_massive, key=itemgetter('percent'))
     return sorted_menu
 

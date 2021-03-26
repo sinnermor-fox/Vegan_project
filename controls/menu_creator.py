@@ -12,16 +12,16 @@ def create_menu_manual(person_id: int):
     if existing_person is not None:
         # Хотелось бы чтобы метод которым расчитывается меню был задан глобально на уровне приложения
         # или передавался бы через параметр, планируется несколько значений
-        food_menu_precounted = count_menu(name='based_csv')
+        food_menu_pre_counted = count_menu(name='based_csv')
         food_items = []
-        for item in food_menu_precounted:
+        for item in food_menu_pre_counted:
             menu_item = MenuWeek(user_id=person_id, food_id=item.id, netto=1)
             food_items.append(menu_item)
         db.session.add_all(food_items)
         db.session.commit()
 
     else:
-        abort(404, f'Person with id {person_id} does not exists')
+        abort(406, f'Person with id {person_id} does not exists')
 
 
 def get_menu_dressed(username: str):

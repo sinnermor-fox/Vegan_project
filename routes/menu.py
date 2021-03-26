@@ -10,7 +10,7 @@ from serializators.menu import MenuListAlias
 @app.route('/menu/<username>', methods=['GET'])
 def menu_personally(username: str) -> flask.Response:
     menu = get_menu_dressed(username)
-    list_comprehension = [FoodNettoMenuAlias(food=item.description, netto=item.MenuWeek.netto) for item in menu]
-    data = MenuListAlias(menu=list_comprehension)
+    list_food_menu = [FoodNettoMenuAlias(food=item.description, netto=item.MenuWeek.netto) for item in menu]
+    data = MenuListAlias(menu=list_food_menu)
     return jsonify(data.dict())
 
