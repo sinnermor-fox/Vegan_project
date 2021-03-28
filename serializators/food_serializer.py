@@ -11,6 +11,8 @@ class FoodModel(BaseModel):
         orm_mode = True
 
 
+#TODO разобраться как игнорировать поля
+# при создании и валидации результирующего объекта
 class FoodNettoAlias(BaseModel):
     id: int
     description: str
@@ -22,7 +24,15 @@ class FoodNettoAlias(BaseModel):
 
 
 class FoodNettoListAlias(BaseModel):
-    food : List[FoodNettoAlias]
+    food: List[FoodNettoAlias]
+
+    class Config:
+        orm_mode = True
+
+
+class FoodNettoMenuAlias(BaseModel):
+    food: str
+    netto: int
 
     class Config:
         orm_mode = True

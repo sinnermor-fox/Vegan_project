@@ -1,28 +1,40 @@
-import logging
-import random
-from sqlalchemy import func
+from werkzeug.exceptions import abort
+
+from app import db
+from controls.algorithms.create_vegan import count_menu
 from models.food import Food
-from models.food_nutrients import FoodNutrients
+from models.menu_week import MenuWeek
+from models.users import User
 
 
-def get_food_nutritions(food_id: int):
-    food_nutrients = FoodNutrients.query.filter(FoodNutrients.food_id == food_id).first()
-    return food_nutrients
+def create_menu_manual(person_id: int):
+    existing_person = User.query().filter(User.id == person_id).first()
+    if existing_person is not None:
+        # Хотелось бы чтобы метод которым расчитывается меню был задан глобально на уровне приложения
+        # или передавался бы через параметр, планируется несколько значений
+        food_menu_pre_counted = count_menu(name='based_csv')
+        food_items = []
+        for item in food_menu_pre_counted:
+            menu_item = MenuWeek(user_id=person_id, food_id=item.id, netto=1)
+            food_items.append(menu_item)
+        db.session.add_all(food_items)
+        db.session.commit()
 
-def get_food_to_menu(group_id, count):
-    food_data = Food.query.filter(Food.food_group_id == group_id).order_by(func.random()).limit(count).all()
-    food_nutrients = FoodNutrients.query.filter(FoodNutrients.food_id == food_data[0]).first()
-    return food_data
+    else:
+        abort(406, f'Person with id {person_id} does not exists')
 
 
-def get_food_menu_v2(group_id, count):
-    i = 0
-    result = []
-    while i < count:
-        food_data = Food.query.filter(Food.food_group_id == group_id).all()
-        random_value = random.randrange(0, len(food_data))
-        logging.info(food_data[random_value])
-        if food_data[random_value] not in result:
-            result.append(food_data[random_value])
-            i += 1
-    return result
+def get_menu_dressed(username: str):
+    user_data = User.query.filter(
+        User.telegram_account == username
+    ).first()
+    menu = db.session.query(
+        MenuWeek,
+        User,
+        Food.description
+    ).filter(
+        MenuWeek.user_id == user_data.id
+    ).filter(
+        MenuWeek.food_id == Food.id
+    ).all()
+    return menu

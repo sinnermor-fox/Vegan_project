@@ -7,6 +7,10 @@ from app import db, app
 
 
 class Nutritions(db.Model):
+    """
+        Class for model Nutrition with data about name, tag and unit
+    """
+
     __tablename__ = 'nutritions'
     id = db.Column(db.Integer, primary_key=True)
     unit = db.Column(db.String(80), nullable=False)
