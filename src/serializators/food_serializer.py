@@ -33,6 +33,8 @@ class FoodNettoListAlias(BaseModel):
 class FoodNettoMenuAlias(BaseModel):
     food: str
     netto: int
+    day: int
 
     class Config:
         orm_mode = True
+
