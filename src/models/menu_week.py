@@ -3,7 +3,6 @@ import datetime
 from app import db
 
 
-#TODO придумать как идентифицировать меню по дням недели
 #TODO переименовать таблицу
 class MenuWeek(db.Model):
     """
@@ -15,5 +14,6 @@ class MenuWeek(db.Model):
     user_id = db.Column(db.Integer, nullable=False)
     food_id = db.Column(db.Integer, nullable=False)
     netto = db.Column(db.Integer, nullable=False)
-    creation_date = db.Column(db.Date, nullable=False)
+    creation_date = db.Column(db.Date, nullable=False,  default=datetime.datetime.utcnow)
+    day_id = db.Column(db.Integer, nullable=False)
 

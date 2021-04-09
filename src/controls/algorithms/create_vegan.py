@@ -1,17 +1,15 @@
 import csv
 import itertools
-import logging
-import random
 from pathlib import Path
 
-from sqlalchemy import func, funcfilter
+from sqlalchemy import func
 from operator import itemgetter
 from app import db
 from config import basedir
-from models.food import Food
-from models.food_nutrients import FoodNutrients
-from models.norms import Norms
-from models.nutritions import Nutritions
+from src.models.food import Food
+from src.models.food_nutrients import FoodNutrients
+from src.models.norms import Norms
+from src.models.nutritions import Nutritions
 
 """
 Тут у нас логика подбора продуктов . Я думаю что тут будет 2 блока
